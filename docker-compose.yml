@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: email-service-db
+    environment:
+      POSTGRES_DB: emaildb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/data.sql
+    networks:
+      - email-service-network
+
+  app:
+    build: .
+    container_name: email-service-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/emaildb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_SECURITY_USER_NAME=admin
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - SPRING_SECURITY_USER_ROLES=ADMIN
+      - OPENAI_API_KEY=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
+      - APP_ATTACHMENTS_DIRECTORY=/app/attachments
+
+    depends_on:
+      - postgres
+    networks:
+      - email-service-network
+
+volumes:
+  postgres_data:
+
+networks:
+  email-service-network:
+    external: true
