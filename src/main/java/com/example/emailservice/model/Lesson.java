@@ -45,6 +45,16 @@ public class Lesson {
     @JsonIgnore
     private User user;
 
+    /**
+     * Relation Many-to-One avec le cours
+     * Plusieurs leçons peuvent appartenir à un même cours
+     * La colonne "course_id" fait référence à l'ID du cours
+     */
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    @JsonIgnore
+    private Course course;
+
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Question> questions;
@@ -63,11 +73,12 @@ public class Lesson {
      * @param description Description de la leçon
      * @param user Utilisateur propriétaire de la leçon
      */
-    public Lesson(Long id, String title, String description, User user) {
+    public Lesson(Long id, String title, String description, User user, Course course) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.user = user;
+        this.course = course;
     }
 
     // ==================== GETTERS ET SETTERS ====================
@@ -134,6 +145,30 @@ public class Lesson {
      */
     public void setUser(User user) {
         this.user = user;
+    }
+
+    /**
+     * Récupère le cours auquel appartient la leçon
+     * @return Le cours propriétaire
+     */
+    public Course getCourse() {
+        return course;
+    }
+
+    /**
+     * Définit le cours auquel appartient la leçon
+     * @param course Le nouveau cours propriétaire
+     */
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Long getCourseId() {
+        return course != null ? course.getId() : null;
+    }
+    
+    public String getCourseTitle() {
+        return course != null ? course.getTitle() : null;
     }
 
     public List<Question> getQuestions() {

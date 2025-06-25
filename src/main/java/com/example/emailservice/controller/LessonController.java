@@ -1,9 +1,7 @@
 package com.example.emailservice.controller;
 
 import com.example.emailservice.model.Lesson;
-import com.example.emailservice.model.User;
 import com.example.emailservice.service.LessonService;
-import com.example.emailservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +26,12 @@ public class LessonController {
     
     @Autowired
     private LessonService lessonService;
-
-    @Autowired
-    private UserService userService;
+    
 
     @GetMapping
     public ResponseEntity<?> getLessons() {
         try {
-            User currentUser = userService.getCurrentUser();
-            List<Lesson> lessons = lessonService.getLessonsByUser(currentUser);
+            List<Lesson> lessons = lessonService.getLessonsByUser();
             return ResponseEntity.ok(lessons);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -50,10 +45,32 @@ public class LessonController {
         return ResponseEntity.ok(lesson);
     }
 
+    @GetMapping("/course/{courseId}")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<?> getLessonsByCourse(@PathVariable Long courseId) {
+        try {
+            List<Lesson> lessons = lessonService.getLessonsByCourse(courseId);
+            return ResponseEntity.ok(lessons);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Utilisateur non authentifié"));
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<?> createLesson(@RequestBody Lesson lesson) {
-        Lesson createdLesson = lessonService.createLesson(lesson);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
+    public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
+        // course peut être null maintenant que vous avez supprimé la contrainte NOT NULL
+        Lesson savedLesson = lessonService.createLesson(lesson);
+        return new ResponseEntity<>(savedLesson, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/courses/{courseId}")
+    public ResponseEntity<Lesson> createLessonWithCourse(
+        @PathVariable Long courseId,
+        @RequestBody Lesson lesson
+    ) {
+        Lesson savedLesson = lessonService.createLessonWithCourse(courseId, lesson);
+        return new ResponseEntity<>(savedLesson, HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
@@ -80,8 +97,7 @@ public class LessonController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLesson(@PathVariable Long id) {
         try {
-            User currentUser = userService.getCurrentUser();
-            lessonService.deleteLesson(id, currentUser);
+            lessonService.deleteLesson(id);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             if (e.getMessage().contains("not found")) {

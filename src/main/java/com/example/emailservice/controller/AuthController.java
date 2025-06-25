@@ -34,7 +34,7 @@ public class AuthController {
      * Méthode HTTP : POST
      * URL : /api/auth/register
      * 
-     * @param request Map contenant "username" et "password"
+     * @param request Map contenant "username", "password" et "email"
      * @return Réponse JSON avec l'ID et le nom d'utilisateur du nouvel utilisateur
      */
     @PostMapping("/register")
@@ -42,6 +42,7 @@ public class AuthController {
         // Extraction des données de la requête
         String username = request.get("username");
         String password = request.get("password");
+        String email = request.get("email"); // Optionnel pour l'instant
         
         // Création de l'utilisateur via le service
         User user = userService.register(username, password);
@@ -57,7 +58,7 @@ public class AuthController {
      * URL : /api/auth/login
      * 
      * @param request Map contenant "username" et "password"
-     * @return Réponse JSON avec le token JWT si l'authentification réussit, sinon erreur 401
+     * @return Réponse JSON avec le token JWT et les informations utilisateur si l'authentification réussit, sinon erreur 401
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
@@ -70,8 +71,17 @@ public class AuthController {
         
         if (userOpt.isPresent()) {
             // Si l'authentification réussit, génération d'un token JWT
+            User user = userOpt.get();
             String token = JwtUtil.generateToken(username);
-            return ResponseEntity.ok(Map.of("token", token));
+            
+            // Retour du token et des informations utilisateur
+            return ResponseEntity.ok(Map.of(
+                "token", token,
+                "user", Map.of(
+                    "id", user.getId().toString(),
+                    "username", user.getUsername()
+                )
+            ));
         }
         
         // Si l'authentification échoue, retour d'une erreur 401

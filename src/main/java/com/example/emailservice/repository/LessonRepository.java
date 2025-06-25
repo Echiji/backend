@@ -29,6 +29,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
      * @return Une liste des leçons appartenant à cet utilisateur
      */
     List<Lesson> findByUser(User user);
+
+    List<Lesson> findByCourse_Id(Long courseId);
 }
 
 

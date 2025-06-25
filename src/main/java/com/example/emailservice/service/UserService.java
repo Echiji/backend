@@ -79,9 +79,13 @@ public class UserService {
     public User getCurrentUser() {
         // Récupération du nom d'utilisateur depuis le contexte de sécurité Spring
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("=== getCurrentUser called ===");
+        System.out.println("Username from SecurityContext: " + username);
         
         // Recherche de l'utilisateur en base de données
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        System.out.println("User found in getCurrentUser: " + userOpt.isPresent());
+        
+        return userOpt.orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

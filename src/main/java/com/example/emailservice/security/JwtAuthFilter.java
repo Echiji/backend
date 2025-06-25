@@ -56,6 +56,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
+        System.out.println("=== JWT Filter Start ===");
+        System.out.println("Request URI: " + request.getRequestURI());
         System.out.println("Authorization header: " + authHeader);
 
         // Vérification de la présence et du format de l'en-tête Authorization
@@ -73,10 +75,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
+        } else {
+            System.out.println("No valid Authorization header found");
         }
 
         // Si un nom d'utilisateur a été extrait et qu'aucune authentification n'est déjà configurée
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("Setting up authentication for username: " + username);
             // Recherche de l'utilisateur en base de données
             Optional<User> userOpt = userRepository.findByUsername(username);
             System.out.println("User in DB: " + userOpt.isPresent());
@@ -91,8 +96,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 
                 // Configuration de l'authentification dans le contexte de sécurité
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("Authentication set successfully");
+            }
+        } else {
+            if (username == null) {
+                System.out.println("Username is null, skipping authentication setup");
+            } else {
+                System.out.println("Authentication already exists, skipping setup");
             }
         }
+
+        System.out.println("=== JWT Filter End ===");
 
         // Continuation de la chaîne de filtres
         filterChain.doFilter(request, response);

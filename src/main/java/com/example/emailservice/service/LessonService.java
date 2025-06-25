@@ -1,6 +1,7 @@
 package com.example.emailservice.service;
 
 import com.example.emailservice.model.Lesson;
+import com.example.emailservice.model.Course;
 import com.example.emailservice.model.User;
 import com.example.emailservice.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.util.Optional;
 @Service
 public class LessonService {
     
+    @Autowired
+    private CourseService courseService;
+
     // Injection automatique du repository pour accéder à la base de données
     @Autowired
     private LessonRepository lessonRepository;
@@ -27,8 +31,9 @@ public class LessonService {
      * @param user L'utilisateur dont on veut récupérer les leçons
      * @return Liste des leçons appartenant à cet utilisateur
      */
-    public List<Lesson> getLessonsByUser(User user) {
-        return lessonRepository.findByUser(user);
+    public List<Lesson> getLessonsByUser() {
+        User currentUser = userService.getCurrentUser();
+        return lessonRepository.findByUser(currentUser);
     }
 
     /**
@@ -39,6 +44,8 @@ public class LessonService {
     public Lesson createLesson(Lesson lesson) {
         User currentUser = userService.getCurrentUser();
         lesson.setUser(currentUser);
+            Course course = courseService.getCourseById(lesson.getCourseId());
+            lesson.setCourse(course);
         return lessonRepository.save(lesson);
     }
 
@@ -81,7 +88,8 @@ public class LessonService {
      * @param currentUser L'utilisateur qui effectue la suppression
      * @throws RuntimeException Si la leçon n'existe pas ou si l'utilisateur n'est pas autorisé
      */
-    public void deleteLesson(Long id, User currentUser) {
+    public void deleteLesson(Long id) {
+        User currentUser = userService.getCurrentUser();
         // Recherche de la leçon existante par son ID
         Optional<Lesson> existingLesson = lessonRepository.findById(id);
         
@@ -106,6 +114,16 @@ public class LessonService {
         return lessonRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Lesson not found"));
     }
+
+    public List<Lesson> getLessonsByCourse(Long courseId) {
+        return lessonRepository.findByCourse_Id(courseId);
+    }
     
-    
+    public Lesson createLessonWithCourse(Long courseId, Lesson lesson) {
+        User currentUser = userService.getCurrentUser();
+        Course course = courseService.getCourseById(courseId);
+        lesson.setUser(currentUser);
+        lesson.setCourse(course);
+        return lessonRepository.save(lesson);
+    }
 }
