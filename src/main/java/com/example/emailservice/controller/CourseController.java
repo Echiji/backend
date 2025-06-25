@@ -136,7 +136,7 @@ public class CourseController {
             @RequestParam String title, 
             @PathVariable Long userId) {
         try {
-            List<Course> courses = courseService.searchCoursesByTitleAndUser(title, userId);
+            List<Course> courses = courseService.searchCoursesByTitleAndUser(title);
             return new ResponseEntity<>(courses, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

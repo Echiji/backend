@@ -10,7 +10,6 @@ com\example\emailservice\model\Question.class
 com\example\emailservice\repository\PossibilityRepository.class
 com\example\emailservice\controller\PossibilityController.class
 com\example\emailservice\service\UserService.class
-com\example\emailservice\exception\CourseException.class
 com\example\emailservice\service\LessonService.class
 com\example\emailservice\service\PossibilityService.class
 com\example\emailservice\repository\UserRepository.class
