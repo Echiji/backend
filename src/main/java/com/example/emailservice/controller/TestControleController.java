@@ -207,9 +207,4 @@ public class TestControleController {
         return new ResponseEntity<>(testControleService.isPerfect(testControle), HttpStatus.OK);
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<ProfileDTO> getProfile() {
-        ProfileDTO profileDTO = profileMapper.toProfileDTO();
-        return ResponseEntity.ok(profileDTO);
-    }
 } 
