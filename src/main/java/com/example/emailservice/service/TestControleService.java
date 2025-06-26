@@ -9,6 +9,13 @@ import com.example.emailservice.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import com.example.emailservice.dto.ProfileDTO;
+import com.example.emailservice.mapper.ProfileMapper;
 import java.util.Optional;
 
 /**
@@ -38,6 +45,12 @@ public class TestControleService {
      * @return Le résultat créé avec son ID
      */
     public TestControle createTestControle(TestControle testControle) {
+        System.out.println("=== SERVICE BACKEND DEBUG ===");
+        System.out.println("Création TestControle:");
+        System.out.println("- nbBonneReponse: " + testControle.getNbBonneReponse());
+        System.out.println("- nbQuestion: " + testControle.getNbQuestion());
+        System.out.println("- pourcentageReussite avant sauvegarde: " + testControle.getPourcentageReussite());
+        
         if (testControle.getUser() == null || testControle.getLesson() == null) {
             throw new IllegalArgumentException("L'utilisateur et la leçon sont obligatoires");
         }
@@ -54,7 +67,10 @@ public class TestControleService {
             throw new IllegalArgumentException("Le nombre de bonnes réponses ne peut pas dépasser le nombre de questions");
         }
         
-        return testControleRepository.save(testControle);
+        TestControle saved = testControleRepository.save(testControle);
+        System.out.println("- pourcentageReussite après sauvegarde: " + saved.getPourcentageReussite());
+        
+        return saved;
     }
     
     /**
@@ -158,11 +174,11 @@ public class TestControleService {
         if (tests.isEmpty()) {
             return 0;
         }
-        
+        //calculer la moyenne des pourcentages de réussite
         double totalPercentage = tests.stream()
             .mapToDouble(TestControle::getPourcentageReussite)
             .sum();
-        
+            
         return (int) Math.round(totalPercentage / tests.size());
     }
     
@@ -183,5 +199,17 @@ public class TestControleService {
             .sum();
         
         return (int) Math.round(totalPercentage / tests.size());
+    }
+    public boolean isPerfect(TestControle testControle) {
+        if (testControle == null) {
+            return false;
+        }
+        
+        // Vérifier que le nombre de bonnes réponses est égal au nombre de questions
+        // ET que le pourcentage de réussite est de 100%
+        return testControle.getNbBonneReponse() != null && 
+               testControle.getNbQuestion() != null &&
+               testControle.getNbBonneReponse().equals(testControle.getNbQuestion()) &&
+               testControle.getPourcentageReussite() == 100;
     }
 }

@@ -135,8 +135,8 @@ public class TestControle {
         if (nbQuestion == null || nbQuestion == 0) {
             return 0;
         }
-        double percentage = (double) nbBonneReponse / nbQuestion * 100;
-        return (int) Math.round(percentage);
+        // Calcul en double puis arrondi vers l'entier le plus proche
+        return (int) Math.round((double) nbBonneReponse / nbQuestion * 100);
     }
 
     @Override

@@ -1,3 +1,4 @@
+com\example\emailservice\controller\UserController.class
 com\example\emailservice\model\TestControle.class
 com\example\emailservice\controller\CourseController.class
 com\example\emailservice\repository\CourseRepository.class
@@ -11,6 +12,7 @@ com\example\emailservice\repository\PossibilityRepository.class
 com\example\emailservice\controller\PossibilityController.class
 com\example\emailservice\service\UserService.class
 com\example\emailservice\service\LessonService.class
+com\example\emailservice\dto\ProfileDTO.class
 com\example\emailservice\service\PossibilityService.class
 com\example\emailservice\repository\UserRepository.class
 com\example\emailservice\security\JwtUtil.class
@@ -19,6 +21,7 @@ com\example\emailservice\EmailServiceApplication.class
 com\example\emailservice\repository\TestControleRepository.class
 com\example\emailservice\security\SecurityConfig.class
 com\example\emailservice\model\User.class
+com\example\emailservice\mapper\ProfileMapper.class
 com\example\emailservice\model\Course.class
 com\example\emailservice\service\CourseService.class
 com\example\emailservice\controller\LessonController.class

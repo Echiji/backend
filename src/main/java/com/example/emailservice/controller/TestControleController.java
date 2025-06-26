@@ -2,6 +2,9 @@ package com.example.emailservice.controller;
 
 import com.example.emailservice.model.TestControle;
 import com.example.emailservice.service.TestControleService;
+import com.example.emailservice.dto.ProfileDTO;
+import com.example.emailservice.mapper.ProfileMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Contrôleur REST pour la gestion des résultats de tests
@@ -23,6 +27,9 @@ public class TestControleController {
     
     @Autowired
     private TestControleService testControleService;
+
+    @Autowired
+    private ProfileMapper profileMapper;
     
     /**
      * Crée un nouveau résultat de test
@@ -58,9 +65,24 @@ public class TestControleController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<TestControle> getTestControleById(@PathVariable Long id) {
-        return testControleService.getTestControleById(id)
-            .map(testControle -> new ResponseEntity<>(testControle, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        System.out.println("=== CONTROLLER DEBUG ===");
+        System.out.println("Recherche TestControle avec ID: " + id);
+        
+        Optional<TestControle> result = testControleService.getTestControleById(id);
+        
+        if (result.isPresent()) {
+            TestControle testControle = result.get();
+            System.out.println("TestControle trouvé:");
+            System.out.println("- nbBonneReponse: " + testControle.getNbBonneReponse());
+            System.out.println("- nbQuestion: " + testControle.getNbQuestion());
+            System.out.println("- pourcentageReussite: " + testControle.getPourcentageReussite());
+            System.out.println("- Calcul manuel: " + ((double)testControle.getNbBonneReponse() / testControle.getNbQuestion()) * 100);
+            
+            return new ResponseEntity<>(testControle, HttpStatus.OK);
+        } else {
+            System.out.println("TestControle non trouvé pour ID: " + id);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     
     /**
@@ -175,4 +197,14 @@ public class TestControleController {
         testControleService.deleteTestControle(testControleId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/isPerfect/{testControleId}")
+    public ResponseEntity<Boolean> isPerfect(@PathVariable Long testControleId) {
+        TestControle testControle = testControleService.getTestControleById(testControleId).orElse(null);
+        if (testControle == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(testControleService.isPerfect(testControle), HttpStatus.OK);
+    }
+
 } 

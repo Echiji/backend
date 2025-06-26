@@ -17,13 +17,16 @@ C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\exa
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\service\CourseService.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\QuestionController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\exception\LessonException.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\mapper\ProfileMapper.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\PossibilityController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\Course.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\CourseRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\EmailServiceApplication.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\UserController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\security\JwtUtil.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\LessonRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\TestControleController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\Lesson.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\UserRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\service\LessonService.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\dto\ProfileDTO.java
