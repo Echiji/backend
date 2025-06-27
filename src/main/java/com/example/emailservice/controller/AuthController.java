@@ -42,7 +42,6 @@ public class AuthController {
         // Extraction des données de la requête
         String username = request.get("username");
         String password = request.get("password");
-        String email = request.get("email"); // Optionnel pour l'instant
         
         // Création de l'utilisateur via le service
         User user = userService.register(username, password);

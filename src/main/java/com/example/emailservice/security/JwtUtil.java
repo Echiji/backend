@@ -2,7 +2,9 @@ package com.example.emailservice.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
+import java.security.Key;
 import java.util.Date;
 
 /**
@@ -21,7 +23,8 @@ public class JwtUtil {
      * Clé secrète utilisée pour signer et vérifier les tokens JWT
      * ATTENTION : En production, cette clé devrait être stockée dans une variable d'environnement
      */
-    private static final String SECRET_KEY = "Qw8n2kLz5pX1vB7sT9yR4uJ6mN3eH0aWqZxCvB2dF5gH8jK1lP0sT3vX6zQ9rS2u";
+    private static final String SECRET_KEY = "mySecretKey1234567890123456789012345678901234567890";
+    private static final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     /**
      * Génère un token JWT pour un utilisateur
@@ -40,7 +43,7 @@ public class JwtUtil {
                 .setSubject(username) // Nom d'utilisateur dans le token
                 .setIssuedAt(new Date()) // Date de création
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // Expiration dans 24h (86400000 ms)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY) // Signature avec HMAC-SHA256
+                .signWith(key, SignatureAlgorithm.HS256) // Signature avec la clé secrète
                 .compact(); // Génération du token final
     }
 
@@ -57,10 +60,12 @@ public class JwtUtil {
      * @throws Exception Si le token est invalide, expiré ou malformé
      */
     public static String extractUsername(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY) // Clé pour vérifier la signature
+        return Jwts.parserBuilder()
+                .setSigningKey(key) // Utilisation de la clé secrète pour vérifier la signature
+                .build()
                 .parseClaimsJws(token) // Parse et vérifie le token
                 .getBody() // Récupère le contenu du token
                 .getSubject(); // Extrait le nom d'utilisateur
+                
     }
 }

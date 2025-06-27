@@ -2,7 +2,6 @@ package com.example.emailservice.security;
 
 import com.example.emailservice.model.User;
 import com.example.emailservice.repository.UserRepository;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

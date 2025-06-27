@@ -2,7 +2,6 @@ package com.example.emailservice.model;
 
 import jakarta.persistence.*;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "question")
@@ -23,15 +22,11 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Possibility> possibilities;
 
-    public Question() {}
+    // Champ temporaire pour stocker l'ID de la leçon pendant la désérialisation
+    @Transient
+    private Long lessonId;
 
-    public Question(Long id, String question, String type, String answer, Lesson lesson) {
-        this.id = id;
-        this.question = question;
-        this.type = type;
-        this.answer = answer;
-        this.lesson = lesson;
-    }
+    public Question() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -48,13 +43,23 @@ public class Question {
     public List<Possibility> getPossibilities() { return possibilities; }
     public void setPossibilities(List<Possibility> possibilities) {
         this.possibilities = possibilities;
-        if (possibilities != null) {
-            for (Possibility p : possibilities) {
-                p.setQuestion(this);
-            }
-        }
     }
 
     public Lesson getLesson() { return lesson; }
     public void setLesson(Lesson lesson) { this.lesson = lesson; }
+
+    public Long getLessonId() {
+        // Si lessonId temporaire est défini, on l'utilise (pour la désérialisation)
+        if (this.lessonId != null) {
+            return this.lessonId;
+        }
+        // Sinon, on utilise l'ID de la leçon liée
+        return lesson != null ? lesson.getId() : null;
+    }
+    
+    public void setLessonId(Long lessonId) {
+        // Cette méthode sera utilisée pour désérialiser le JSON
+        // La leçon sera récupérée dans le service
+        this.lessonId = lessonId;
+    }
 }

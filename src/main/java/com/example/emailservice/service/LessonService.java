@@ -44,8 +44,18 @@ public class LessonService {
     public Lesson createLesson(Lesson lesson) {
         User currentUser = userService.getCurrentUser();
         lesson.setUser(currentUser);
+        
+        // Vérifier si courseId est fourni dans le JSON
+        if (lesson.getCourseId() != null) {
             Course course = courseService.getCourseById(lesson.getCourseId());
+            if (course == null) {
+                throw new RuntimeException("Course not found with ID: " + lesson.getCourseId());
+            }
             lesson.setCourse(course);
+        } else {
+            throw new RuntimeException("courseId is required");
+        }
+        
         return lessonRepository.save(lesson);
     }
 
@@ -125,5 +135,26 @@ public class LessonService {
         lesson.setUser(currentUser);
         lesson.setCourse(course);
         return lessonRepository.save(lesson);
+    }
+
+    /**
+     * Récupère toutes les leçons
+     */
+    public List<Lesson> getAllLessons() {
+        return lessonRepository.findAll();
+    }
+    
+    /**
+     * Récupère les leçons par ID de cours
+     */
+    public List<Lesson> getLessonsByCourseId(Long courseId) {
+        return lessonRepository.findByCourse_Id(courseId);
+    }
+    
+    /**
+     * Récupère les leçons par ID d'utilisateur
+     */
+    public List<Lesson> getLessonsByUserId(Long userId) {
+        return lessonRepository.findByUser_Id(userId);
     }
 }

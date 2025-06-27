@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "possibility")
 public class Possibility {
@@ -18,7 +16,6 @@ public class Possibility {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    @JsonIgnore
     private Question question;
 
     public Possibility() {}

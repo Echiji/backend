@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.emailservice.dto.CourseDTO;
+import com.example.emailservice.mapper.CourseMapper;
 
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
     
+    @Autowired
+    private CourseMapper courseMapper;
+    
     /**
      * Crée un nouveau cours
      * 
@@ -31,13 +36,10 @@ public class CourseController {
      * @return Le cours créé avec le statut 201 (Created)
      */
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        try {
-            Course createdCourse = courseService.createCourse(course);
-            return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<CourseDTO> createCourse(@RequestBody Course course) {
+        Course savedCourse = courseService.createCourse(course);
+        CourseDTO courseDTO = courseMapper.toCourseDTO(savedCourse);
+        return ResponseEntity.ok(courseDTO);
     }
     
     /**
@@ -46,9 +48,10 @@ public class CourseController {
      * @return Liste de tous les cours avec le statut 200 (OK)
      */
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
         List<Course> courses = courseService.getAllCourses();
-        return new ResponseEntity<>(courses, HttpStatus.OK);
+        List<CourseDTO> courseDTOs = courseMapper.toCourseDTOList(courses);
+        return ResponseEntity.ok(courseDTOs);
     }
     
     /**
@@ -58,13 +61,13 @@ public class CourseController {
      * @return Le cours trouvé avec le statut 200 (OK) ou 404 (Not Found)
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) {
         Course course = courseService.getCourseById(id);
         if (course != null) {
-            return new ResponseEntity<>(course, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            CourseDTO courseDTO = courseMapper.toCourseDTO(course);
+            return ResponseEntity.ok(courseDTO);
         }
+        return ResponseEntity.notFound().build();
     }
     
     /**
@@ -74,9 +77,10 @@ public class CourseController {
      * @return Liste des cours de l'utilisateur avec le statut 200 (OK)
      */
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Course>> getCoursesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<CourseDTO>> getCoursesByUserId(@PathVariable Long userId) {
         List<Course> courses = courseService.getCoursesByUserId(userId);
-        return new ResponseEntity<>(courses, HttpStatus.OK);
+        List<CourseDTO> courseDTOs = courseMapper.toCourseDTOList(courses);
+        return ResponseEntity.ok(courseDTOs);
     }
     
     /**
@@ -87,13 +91,13 @@ public class CourseController {
      * @return Le cours mis à jour avec le statut 200 (OK) ou 404 (Not Found)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
-        try {
-            Course updatedCourse = courseService.updateCourse(id, courseDetails);
-            return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<CourseDTO> updateCourse(@PathVariable Long id, @RequestBody Course course) {
+        Course updatedCourse = courseService.updateCourse(id, course);
+        if (updatedCourse != null) {
+            CourseDTO courseDTO = courseMapper.toCourseDTO(updatedCourse);
+            return ResponseEntity.ok(courseDTO);
         }
+        return ResponseEntity.notFound().build();
     }
     
     /**
@@ -104,12 +108,8 @@ public class CourseController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        try {
-            courseService.deleteCourse(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        courseService.deleteCourse(id);
+        return ResponseEntity.ok().build();
     }
     
     /**
