@@ -2,7 +2,7 @@ package com.example.emailservice.repository;
 
 import com.example.emailservice.model.TestControle;
 import com.example.emailservice.model.User;
-import com.example.emailservice.model.Lesson;
+import com.example.emailservice.model.Questionnaire;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -33,47 +33,47 @@ public interface TestControleRepository extends JpaRepository<TestControle, Long
     List<TestControle> findByUserId(Long userId);
     
     /**
-     * Trouve tous les tests pour une leçon spécifique
+     * Trouve tous les tests pour un questionnaire spécifique
      * 
-     * @param lesson La leçon
-     * @return Liste des tests pour cette leçon
+     * @param questionnaire Le questionnaire
+     * @return Liste des tests pour ce questionnaire
      */
-    List<TestControle> findByLesson(Lesson lesson);
+    List<TestControle> findByQuestionnaire(Questionnaire questionnaire);
     
     /**
-     * Trouve tous les tests pour une leçon par son ID
+     * Trouve tous les tests pour un questionnaire par son ID
      * 
-     * @param lessonId L'ID de la leçon
-     * @return Liste des tests pour cette leçon
+     * @param questionnaireId L'ID du questionnaire
+     * @return Liste des tests pour ce questionnaire
      */
-    List<TestControle> findByLessonId(Long lessonId);
+    List<TestControle> findByQuestionnaireId(Long questionnaireId);
     
     /**
-     * Trouve tous les tests d'un utilisateur pour une leçon spécifique
+     * Trouve tous les tests d'un utilisateur pour un questionnaire spécifique
      * 
      * @param user L'utilisateur
-     * @param lesson La leçon
-     * @return Liste des tests de l'utilisateur pour cette leçon
+     * @param questionnaire Le questionnaire
+     * @return Liste des tests de l'utilisateur pour ce questionnaire
      */
-    List<TestControle> findByUserAndLesson(User user, Lesson lesson);
+    List<TestControle> findByUserAndQuestionnaire(User user, Questionnaire questionnaire);
     
     /**
-     * Trouve tous les tests d'un utilisateur pour une leçon par leurs IDs
+     * Trouve tous les tests d'un utilisateur pour un questionnaire par leurs IDs
      * 
      * @param userId L'ID de l'utilisateur
-     * @param lessonId L'ID de la leçon
-     * @return Liste des tests de l'utilisateur pour cette leçon
+     * @param questionnaireId L'ID du questionnaire
+     * @return Liste des tests de l'utilisateur pour ce questionnaire
      */
-    List<TestControle> findByUserIdAndLessonId(Long userId, Long lessonId);
+    List<TestControle> findByUserIdAndQuestionnaireId(Long userId, Long questionnaireId);
     
     /**
-     * Trouve le meilleur score d'un utilisateur pour une leçon
+     * Trouve le meilleur score d'un utilisateur pour un questionnaire
      * 
      * @param userId L'ID de l'utilisateur
-     * @param lessonId L'ID de la leçon
+    * @param questionnaireId L'ID du questionnaire
      * @return Le test avec le meilleur score ou null
      */
-    TestControle findTopByUserIdAndLessonIdOrderByNbBonneReponseDesc(Long userId, Long lessonId);
+    TestControle findTopByUserIdAndQuestionnaireIdOrderByNbBonneReponseDesc(Long userId, Long questionnaireId);
     
     /**
      * Compte le nombre de tests d'un utilisateur
@@ -84,10 +84,10 @@ public interface TestControleRepository extends JpaRepository<TestControle, Long
     long countByUserId(Long userId);
     
     /**
-     * Compte le nombre de tests pour une leçon
+     * Compte le nombre de tests pour un questionnaire
      * 
-     * @param lessonId L'ID de la leçon
+     * @param questionnaireId L'ID du questionnaire
      * @return Le nombre de tests
      */
-    long countByLessonId(Long lessonId);
+    long countByQuestionnaireId(Long questionnaireId);
 } 

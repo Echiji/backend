@@ -1,7 +1,6 @@
 package com.example.emailservice.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 /**
@@ -42,7 +41,6 @@ public class Lesson {
      */
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     /**
@@ -52,12 +50,10 @@ public class Lesson {
      */
     @ManyToOne
     @JoinColumn(name = "course_id")
-    @JsonIgnore
     private Course course;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Question> questions;
+    private List<Questionnaire> questionnaires;
 
     /**
      * Constructeur par défaut requis par JPA
@@ -164,6 +160,11 @@ public class Lesson {
     }
 
     public Long getCourseId() {
+        // Si courseId temporaire est défini, on l'utilise (pour la désérialisation)
+        if (this.courseId != null) {
+            return this.courseId;
+        }
+        // Sinon, on utilise l'ID du cours lié
         return course != null ? course.getId() : null;
     }
     
@@ -171,11 +172,22 @@ public class Lesson {
         return course != null ? course.getTitle() : null;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<Questionnaire> getQuestionnaires() {
+        return questionnaires;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setQuestionnaires(List<Questionnaire> questionnaires) {
+        this.questionnaires = questionnaires;
     }
+
+    public void setCourseId(Long courseId) {
+        // Cette méthode sera utilisée pour désérialiser le JSON
+        // Le cours sera récupéré dans le service
+        // Pour l'instant, on stocke l'ID dans un champ temporaire
+        this.courseId = courseId;
+    }
+    
+    // Champ temporaire pour stocker l'ID du cours pendant la désérialisation
+    @Transient
+    private Long courseId;
 }

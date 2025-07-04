@@ -7,10 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 /**
  * Configuration de la sécurité de l'application
@@ -52,6 +49,16 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 // Autoriser l'accès à une leçon spécifique sans authentification
                 .requestMatchers("/api/lessons/*").permitAll()
+                // Autoriser l'accès aux questions pour les utilisateurs authentifiés
+                .requestMatchers("/api/questions/**").authenticated()
+                // Autoriser l'accès aux cours pour les utilisateurs authentifiés
+                .requestMatchers("/api/courses/**").authenticated()
+                // Autoriser l'accès aux possibilités pour les utilisateurs authentifiés
+                .requestMatchers("/api/possibilities/**").authenticated()
+                // Autoriser l'accès aux tests de contrôle pour les utilisateurs authentifiés
+                .requestMatchers("/api/test-controle/**").authenticated()
+                // Autoriser l'accès aux utilisateurs pour les utilisateurs authentifiés
+                .requestMatchers("/api/user/**").authenticated()
                 // Tous les autres endpoints nécessitent une authentification
                 .anyRequest().authenticated()
             )

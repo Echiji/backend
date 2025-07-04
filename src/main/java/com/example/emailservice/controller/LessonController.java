@@ -3,12 +3,13 @@ package com.example.emailservice.controller;
 import com.example.emailservice.model.Lesson;
 import com.example.emailservice.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.emailservice.dto.LessonDTO;
+import com.example.emailservice.mapper.LessonMapper;
+
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Contrôleur pour la gestion des leçons
@@ -27,88 +28,60 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
     
-
+    @Autowired
+    private LessonMapper lessonMapper;
+    
     @GetMapping
-    public ResponseEntity<?> getLessons() {
-        try {
-            List<Lesson> lessons = lessonService.getLessonsByUser();
-            return ResponseEntity.ok(lessons);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Utilisateur non authentifié"));
-        }
+    public ResponseEntity<List<LessonDTO>> getAllLessons() {
+        List<Lesson> lessons = lessonService.getAllLessons();
+        List<LessonDTO> lessonDTOs = lessonMapper.toLessonDTOList(lessons);
+        return ResponseEntity.ok(lessonDTOs);
     }
-
+    
     @GetMapping("/{id}")
-    public ResponseEntity<?> getLesson(@PathVariable Long id) {
+    public ResponseEntity<LessonDTO> getLessonById(@PathVariable Long id) {
         Lesson lesson = lessonService.getLessonById(id);
-        return ResponseEntity.ok(lesson);
-    }
-
-    @GetMapping("/course/{courseId}")
-    @CrossOrigin(origins = "*")
-    public ResponseEntity<?> getLessonsByCourse(@PathVariable Long courseId) {
-        try {
-            List<Lesson> lessons = lessonService.getLessonsByCourse(courseId);
-            return ResponseEntity.ok(lessons);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Utilisateur non authentifié"));
+        if (lesson != null) {
+            LessonDTO lessonDTO = lessonMapper.toLessonDTO(lesson);
+            return ResponseEntity.ok(lessonDTO);
         }
+        return ResponseEntity.notFound().build();
     }
-
+    
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<List<LessonDTO>> getLessonsByCourseId(@PathVariable Long courseId) {
+        List<Lesson> lessons = lessonService.getLessonsByCourseId(courseId);
+        List<LessonDTO> lessonDTOs = lessonMapper.toLessonDTOList(lessons);
+        return ResponseEntity.ok(lessonDTOs);
+    }
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<LessonDTO>> getLessonsByUserId(@PathVariable Long userId) {
+        List<Lesson> lessons = lessonService.getLessonsByUserId(userId);
+        List<LessonDTO> lessonDTOs = lessonMapper.toLessonDTOList(lessons);
+        return ResponseEntity.ok(lessonDTOs);
+    }
+    
     @PostMapping
-    public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
-        // course peut être null maintenant que vous avez supprimé la contrainte NOT NULL
+    public ResponseEntity<LessonDTO> createLesson(@RequestBody Lesson lesson) {
         Lesson savedLesson = lessonService.createLesson(lesson);
-        return new ResponseEntity<>(savedLesson, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/courses/{courseId}")
-    public ResponseEntity<Lesson> createLessonWithCourse(
-        @PathVariable Long courseId,
-        @RequestBody Lesson lesson
-    ) {
-        Lesson savedLesson = lessonService.createLessonWithCourse(courseId, lesson);
-        return new ResponseEntity<>(savedLesson, HttpStatus.CREATED);
+        LessonDTO lessonDTO = lessonMapper.toLessonDTO(savedLesson);
+        return ResponseEntity.ok(lessonDTO);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
-        try {
-            Lesson updatedLesson = lessonService.updateLesson(id, lesson);
-            return ResponseEntity.ok(updatedLesson);
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Leçon non trouvée"));
-            } else if (e.getMessage().contains("non autorisé")) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "Vous n'êtes pas autorisé à modifier cette leçon"));
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Utilisateur non authentifié"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", "Erreur lors de la modification: " + e.getMessage()));
+    public ResponseEntity<LessonDTO> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
+        Lesson updatedLesson = lessonService.updateLesson(id, lesson);
+        if (updatedLesson != null) {
+            LessonDTO lessonDTO = lessonMapper.toLessonDTO(updatedLesson);
+            return ResponseEntity.ok(lessonDTO);
         }
+        return ResponseEntity.notFound().build();
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLesson(@PathVariable Long id) {
-        try {
-            lessonService.deleteLesson(id);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Leçon non trouvée"));
-            } else if (e.getMessage().contains("non autorisé")) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "Vous n'êtes pas autorisé à supprimer cette leçon"));
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Utilisateur non authentifié"));
-        }
+    public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
+        lessonService.deleteLesson(id);
+        return ResponseEntity.ok().build();
     }
 }

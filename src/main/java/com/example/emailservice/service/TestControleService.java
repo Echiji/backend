@@ -2,20 +2,13 @@ package com.example.emailservice.service;
 
 import com.example.emailservice.model.TestControle;
 import com.example.emailservice.model.User;
-import com.example.emailservice.model.Lesson;
+    import com.example.emailservice.model.Questionnaire;
 import com.example.emailservice.repository.TestControleRepository;
 import com.example.emailservice.repository.UserRepository;
-import com.example.emailservice.repository.LessonRepository;
+import com.example.emailservice.repository.QuestionnaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import com.example.emailservice.dto.ProfileDTO;
-import com.example.emailservice.mapper.ProfileMapper;
 import java.util.Optional;
 
 /**
@@ -36,7 +29,7 @@ public class TestControleService {
     private UserRepository userRepository;
     
     @Autowired
-    private LessonRepository lessonRepository;
+    private QuestionnaireRepository questionnaireRepository;
     
     /**
      * Crée un nouveau résultat de test
@@ -51,8 +44,8 @@ public class TestControleService {
         System.out.println("- nbQuestion: " + testControle.getNbQuestion());
         System.out.println("- pourcentageReussite avant sauvegarde: " + testControle.getPourcentageReussite());
         
-        if (testControle.getUser() == null || testControle.getLesson() == null) {
-            throw new IllegalArgumentException("L'utilisateur et la leçon sont obligatoires");
+        if (testControle.getUser() == null || testControle.getQuestionnaire() == null) {
+            throw new IllegalArgumentException("L'utilisateur et le questionnaire sont obligatoires");
         }
         
         if (testControle.getNbBonneReponse() == null || testControle.getNbQuestion() == null) {
@@ -78,18 +71,18 @@ public class TestControleService {
      * 
      * @param nbBonneReponse Nombre de bonnes réponses
      * @param nbQuestion Nombre total de questions
-     * @param lessonId ID de la leçon
+     * @param questionnaireId ID du questionnaire
      * @param userId ID de l'utilisateur
      * @return Le résultat créé
      */
-    public TestControle createTestControle(Integer nbBonneReponse, Integer nbQuestion, Long lessonId, Long userId) {
+    public TestControle createTestControle(Integer nbBonneReponse, Integer nbQuestion, Long questionnaireId, Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé avec l'ID: " + userId));
         
-        Lesson lesson = lessonRepository.findById(lessonId)
-            .orElseThrow(() -> new IllegalArgumentException("Leçon non trouvée avec l'ID: " + lessonId));
+        Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
+            .orElseThrow(() -> new IllegalArgumentException("Questionnaire non trouvé avec l'ID: " + questionnaireId));
         
-        TestControle testControle = new TestControle(nbBonneReponse, nbQuestion, lesson, user);
+        TestControle testControle = new TestControle(nbBonneReponse, nbQuestion, questionnaire, user);
         return createTestControle(testControle);
     }
     
@@ -116,33 +109,33 @@ public class TestControleService {
     /**
      * Récupère tous les résultats pour une leçon
      * 
-     * @param lessonId L'ID de la leçon
-     * @return Liste des résultats pour cette leçon
+     * @param questionnaireId L'ID du questionnaire
+     * @return Liste des résultats pour ce questionnaire
      */
-    public List<TestControle> getTestControlesByLessonId(Long lessonId) {
-        return testControleRepository.findByLessonId(lessonId);
+    public List<TestControle> getTestControlesByQuestionnaireId(Long questionnaireId) {
+        return testControleRepository.findByQuestionnaireId(questionnaireId);
     }
     
     /**
      * Récupère tous les résultats d'un utilisateur pour une leçon
      * 
      * @param userId L'ID de l'utilisateur
-     * @param lessonId L'ID de la leçon
+     * @param questionnaireId L'ID du questionnaire
      * @return Liste des résultats
      */
-    public List<TestControle> getTestControlesByUserIdAndLessonId(Long userId, Long lessonId) {
-        return testControleRepository.findByUserIdAndLessonId(userId, lessonId);
+    public List<TestControle> getTestControlesByUserIdAndQuestionnaireId(Long userId, Long questionnaireId) {
+        return testControleRepository.findByUserIdAndQuestionnaireId(userId, questionnaireId);
     }
     
     /**
      * Récupère le meilleur score d'un utilisateur pour une leçon
      * 
      * @param userId L'ID de l'utilisateur
-     * @param lessonId L'ID de la leçon
+    * @param questionnaireId L'ID du questionnaire
      * @return Le meilleur résultat ou null
      */
-    public TestControle getBestScoreByUserIdAndLessonId(Long userId, Long lessonId) {
-        return testControleRepository.findTopByUserIdAndLessonIdOrderByNbBonneReponseDesc(userId, lessonId);
+    public TestControle getBestScoreByUserIdAndQuestionnaireId(Long userId, Long questionnaireId) {
+        return testControleRepository.findTopByUserIdAndQuestionnaireIdOrderByNbBonneReponseDesc(userId, questionnaireId);
     }
     
     /**
@@ -185,11 +178,11 @@ public class TestControleService {
     /**
      * Calcule la moyenne des scores pour une leçon
      * 
-     * @param lessonId L'ID de la leçon
+     * @param questionnaireId L'ID du questionnaire
      * @return La moyenne des pourcentages de réussite (arrondie aux unités)
      */
-    public Integer getAverageScoreByLessonId(Long lessonId) {
-        List<TestControle> tests = getTestControlesByLessonId(lessonId);
+    public Integer getAverageScoreByQuestionnaireId(Long questionnaireId) {
+        List<TestControle> tests = getTestControlesByQuestionnaireId(questionnaireId);
         if (tests.isEmpty()) {
             return 0;
         }

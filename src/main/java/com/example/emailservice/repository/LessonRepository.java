@@ -31,6 +31,11 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByUser(User user);
 
     List<Lesson> findByCourse_Id(Long courseId);
+
+    /**
+     * Trouve les leçons par ID d'utilisateur
+     */
+    List<Lesson> findByUser_Id(Long userId);
 }
 
 

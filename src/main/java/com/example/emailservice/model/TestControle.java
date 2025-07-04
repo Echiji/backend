@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * Entité TestControle représentant les résultats d'une leçon
+ * Entité TestControle représentant les résultats d'un questionnaire
  * 
  * Cette classe est mappée à la table "test_controle" en base de données.
- * Elle contient les informations sur les résultats d'un utilisateur pour une leçon :
+ * Elle contient les informations sur les résultats d'un utilisateur pour un questionnaire :
  * - Identifiant unique
  * - Nombre de bonnes réponses
  * - Nombre total de questions
- * - Référence vers la leçon
+ * - Référence vers le questionnaire
  * - Référence vers l'utilisateur
  * - Date de création
  */
@@ -34,7 +34,7 @@ public class TestControle {
     private Integer nbBonneReponse;
 
     /**
-     * Nombre total de questions dans la leçon
+     * Nombre total de questions dans le questionnaire
      */
     @Column(name = "nb_question")
     private Integer nbQuestion;
@@ -46,11 +46,11 @@ public class TestControle {
     private LocalDateTime dateCreation;
 
     /**
-     * Référence vers la leçon
+        * Référence vers le questionnaire
      */
     @ManyToOne
-    @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
+    @JoinColumn(name = "questionnaire_id")
+    private Questionnaire questionnaire;
 
     /**
      * Référence vers l'utilisateur
@@ -69,10 +69,10 @@ public class TestControle {
     /**
      * Constructeur avec paramètres
      */
-    public TestControle(Integer nbBonneReponse, Integer nbQuestion, Lesson lesson, User user) {
+    public TestControle(Integer nbBonneReponse, Integer nbQuestion, Questionnaire questionnaire, User user) {
         this.nbBonneReponse = nbBonneReponse;
         this.nbQuestion = nbQuestion;
-        this.lesson = lesson;
+        this.questionnaire = questionnaire;
         this.user = user;
         this.dateCreation = LocalDateTime.now();
     }
@@ -111,12 +111,12 @@ public class TestControle {
         this.dateCreation = dateCreation;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
     }
 
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
     }
 
     public User getUser() {
@@ -146,7 +146,7 @@ public class TestControle {
                 ", nbBonneReponse=" + nbBonneReponse +
                 ", nbQuestion=" + nbQuestion +
                 ", dateCreation=" + dateCreation +
-                ", lesson=" + (lesson != null ? lesson.getId() : null) +
+                ", questionnaire=" + (questionnaire != null ? questionnaire.getId() : null) +
                 ", user=" + (user != null ? user.getId() : null) +
                 '}';
     }
