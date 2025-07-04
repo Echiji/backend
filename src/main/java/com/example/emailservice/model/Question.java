@@ -16,15 +16,15 @@ public class Question {
     private String answer;
 
     @ManyToOne
-    @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
+    @JoinColumn(name = "questionnaire_id")
+    private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Possibility> possibilities;
 
-    // Champ temporaire pour stocker l'ID de la leçon pendant la désérialisation
+    // Champ temporaire pour stocker l'ID du questionnaire pendant la désérialisation
     @Transient
-    private Long lessonId;
+    private Long questionnaireId;
 
     public Question() {}
 
@@ -45,21 +45,21 @@ public class Question {
         this.possibilities = possibilities;
     }
 
-    public Lesson getLesson() { return lesson; }
-    public void setLesson(Lesson lesson) { this.lesson = lesson; }
+    public Questionnaire getQuestionnaire() { return questionnaire; }
+    public void setQuestionnaire(Questionnaire questionnaire) { this.questionnaire = questionnaire; }
 
-    public Long getLessonId() {
-        // Si lessonId temporaire est défini, on l'utilise (pour la désérialisation)
-        if (this.lessonId != null) {
-            return this.lessonId;
+    public Long getQuestionnaireId() {
+        // Si questionnaireId temporaire est défini, on l'utilise (pour la désérialisation)
+        if (this.questionnaireId != null) {
+            return this.questionnaireId;
         }
-        // Sinon, on utilise l'ID de la leçon liée
-        return lesson != null ? lesson.getId() : null;
+        // Sinon, on utilise l'ID du questionnaire lié
+        return questionnaire != null ? questionnaire.getId() : null;
     }
     
-    public void setLessonId(Long lessonId) {
+    public void setQuestionnaireId(Long questionnaireId) {
         // Cette méthode sera utilisée pour désérialiser le JSON
-        // La leçon sera récupérée dans le service
-        this.lessonId = lessonId;
+        // Le questionnaire sera récupéré dans le service
+        this.questionnaireId = questionnaireId;
     }
 }

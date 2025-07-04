@@ -7,8 +7,8 @@ public class TestControleDTO {
     private Integer nbBonneReponse;
     private Integer nbQuestion;
     private LocalDateTime dateCreation;
-    private Long lessonId;
-    private String lessonTitle;
+    private Long questionnaireId;
+    private String questionnaireTitle;
     private Long userId;
     private String username;
     private Integer pourcentageReussite;
@@ -16,13 +16,13 @@ public class TestControleDTO {
     public TestControleDTO() {}
 
     public TestControleDTO(Long id, Integer nbBonneReponse, Integer nbQuestion, LocalDateTime dateCreation, 
-                          Long lessonId, String lessonTitle, Long userId, String username, Integer pourcentageReussite) {
+                          Long questionnaireId, String questionnaireTitle, Long userId, String username, Integer pourcentageReussite) {
         this.id = id;
         this.nbBonneReponse = nbBonneReponse;
         this.nbQuestion = nbQuestion;
         this.dateCreation = dateCreation;
-        this.lessonId = lessonId;
-        this.lessonTitle = lessonTitle;
+        this.questionnaireId = questionnaireId;
+        this.questionnaireTitle = questionnaireTitle;
         this.userId = userId;
         this.username = username;
         this.pourcentageReussite = pourcentageReussite;
@@ -41,11 +41,11 @@ public class TestControleDTO {
     public LocalDateTime getDateCreation() { return dateCreation; }
     public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
 
-    public Long getLessonId() { return lessonId; }
-    public void setLessonId(Long lessonId) { this.lessonId = lessonId; }
+    public Long getQuestionnaireId() { return questionnaireId; }
+    public void setQuestionnaireId(Long questionnaireId) { this.questionnaireId = questionnaireId; }
 
-    public String getLessonTitle() { return lessonTitle; }
-    public void setLessonTitle(String lessonTitle) { this.lessonTitle = lessonTitle; }
+    public String getQuestionnaireTitle() { return questionnaireTitle; }
+    public void setQuestionnaireTitle(String questionnaireTitle) { this.questionnaireTitle = questionnaireTitle; }
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }

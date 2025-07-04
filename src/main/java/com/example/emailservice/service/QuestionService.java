@@ -1,7 +1,7 @@
 package com.example.emailservice.service;
 
 import com.example.emailservice.model.Question;
-import com.example.emailservice.model.Lesson;
+import com.example.emailservice.model.Questionnaire;
 import com.example.emailservice.model.User;
 import com.example.emailservice.model.Possibility;
 import com.example.emailservice.repository.QuestionRepository;
@@ -18,22 +18,22 @@ public class QuestionService {
     @Autowired
     private UserService userService;
     @Autowired
-    private LessonService lessonService;
+    private QuestionnaireService questionnaireService;
     @Autowired
     private PossibilityService possibilityService;
 
     /**
-     * Récupère les questions d'une leçon
+     * Récupère les questions d'un questionnaire
      */
-    public List<Question> getQuestionsByLesson(Lesson lesson) {
-        return questionRepository.findByLesson(lesson);
+    public List<Question> getQuestionsByQuestionnaire(Questionnaire questionnaire) {
+        return questionRepository.findByQuestionnaire(questionnaire);
     }
 
     /**
-     * Récupère les questions par ID de leçon
+     * Récupère les questions par ID de questionnaire
      */
-    public List<Question> getQuestionsByLessonId(Long lessonId) {
-        return questionRepository.findByLesson_Id(lessonId);
+    public List<Question> getQuestionsByQuestionnaireId(Long questionnaireId) {
+        return questionRepository.findByQuestionnaire_Id(questionnaireId);
     }
 
     /**
@@ -55,21 +55,26 @@ public class QuestionService {
      * Crée une nouvelle question
      */
     public Question createQuestion(Question question) {
-        Long lessonId = question.getLessonId();
-        if (lessonId == null) {
-            throw new RuntimeException("lessonId is required");
+        Long questionnaireId = question.getQuestionnaireId();
+        if (questionnaireId == null) {
+            throw new RuntimeException("questionnaireId is required");
         }
         
-        Lesson lesson = lessonService.getLessonById(lessonId);
+        Questionnaire questionnaire = questionnaireService.getQuestionnaireEntityById(questionnaireId);
         User currentUser = userService.getCurrentUser();
-        if (!lesson.getUser().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("Vous n'êtes pas autorisé à ajouter une question à cette leçon");
+        if (!questionnaire.getLesson().getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Vous n'êtes pas autorisé à ajouter une question à ce questionnaire");
         }
         Question questionToSave = new Question();
         questionToSave.setQuestion(question.getQuestion());
         questionToSave.setType(question.getType());
         questionToSave.setAnswer(question.getAnswer());
-        questionToSave.setLesson(lesson);
+        questionToSave.setQuestionnaire(questionnaire);
+        
+        // Initialiser la liste des possibilités si elle est null
+        if (question.getPossibilities() == null) {
+            question.setPossibilities(new ArrayList<>());
+        }
 
         // Sauvegarder d'abord la question pour obtenir son ID
         Question savedQuestion = questionRepository.save(questionToSave);
@@ -92,7 +97,7 @@ public class QuestionService {
         
         // Vérifier les autorisations
         User currentUser = userService.getCurrentUser();
-        if (!existingQuestion.getLesson().getUser().getId().equals(currentUser.getId())) {
+        if (!existingQuestion.getQuestionnaire().getLesson().getUser().getId().equals(currentUser.getId())) {
             throw new RuntimeException("Vous n'êtes pas autorisé à modifier cette question");
         }
         
@@ -101,12 +106,15 @@ public class QuestionService {
         existingQuestion.setType(question.getType());
         existingQuestion.setAnswer(question.getAnswer());
         
-        // Mettre à jour les possibilités si fournies
+        // Mettre à jour les possibilités SANS remplacer la liste
         if (question.getPossibilities() != null) {
+            // Vider la collection existante
+            existingQuestion.getPossibilities().clear();
+            // Ajouter les nouvelles possibilités
             for (Possibility p : question.getPossibilities()) {
-                p.setQuestion(existingQuestion);
+                p.setQuestion(existingQuestion); // bien lier la possibilité à la question
+                existingQuestion.getPossibilities().add(p);
             }
-            existingQuestion.setPossibilities(question.getPossibilities());
         }
         
         return questionRepository.save(existingQuestion);
@@ -120,7 +128,7 @@ public class QuestionService {
         
         // Vérifier les autorisations
         User currentUser = userService.getCurrentUser();
-        if (!question.getLesson().getUser().getId().equals(currentUser.getId())) {
+        if (!question.getQuestionnaire().getLesson().getUser().getId().equals(currentUser.getId())) {
             throw new RuntimeException("Vous n'êtes pas autorisé à supprimer cette question");
         }
         

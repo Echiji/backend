@@ -15,7 +15,7 @@ public class QuestionMapper {
         dto.setQuestion(question.getQuestion());
         dto.setType(question.getType());
         dto.setAnswer(question.getAnswer());
-        dto.setLessonId(question.getLesson() != null ? question.getLesson().getId() : null);
+        dto.setQuestionnaireId(question.getQuestionnaire() != null ? question.getQuestionnaire().getId() : null);
         dto.setPossibilities(question.getPossibilities().stream()
             .map(PossibilityMapper::toPossibilityDTO)
             .collect(Collectors.toList()));

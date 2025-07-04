@@ -41,11 +41,11 @@ public class TestControleController {
         try {
             Integer nbBonneReponse = (Integer) request.get("nbBonneReponse");
             Integer nbQuestion = (Integer) request.get("nbQuestion");
-            Long lessonId = Long.valueOf(request.get("lessonId").toString());
+            Long questionnaireId = Long.valueOf(request.get("questionnaireId").toString());
             Long userId = Long.valueOf(request.get("userId").toString());
             
             TestControle testControle = testControleService.createTestControle(
-                nbBonneReponse, nbQuestion, lessonId, userId
+                nbBonneReponse, nbQuestion, questionnaireId, userId
             );
             
             TestControleDTO testControleDTO = testControleMapper.toTestControleDTO(testControle);
@@ -90,9 +90,9 @@ public class TestControleController {
      * @param lessonId L'ID de la leçon
      * @return Liste des résultats avec le statut 200 (OK)
      */
-    @GetMapping("/lesson/{lessonId}")
-    public ResponseEntity<List<TestControleDTO>> getTestControlesByLessonId(@PathVariable Long lessonId) {
-        List<TestControle> testControles = testControleService.getTestControlesByLessonId(lessonId);
+    @GetMapping("/questionnaire/{questionnaireId}")
+    public ResponseEntity<List<TestControleDTO>> getTestControlesByQuestionnaireId(@PathVariable Long questionnaireId) {
+        List<TestControle> testControles = testControleService.getTestControlesByQuestionnaireId(questionnaireId);
         List<TestControleDTO> dtos = testControleMapper.toTestControleDTOList(testControles);
         return ResponseEntity.ok(dtos);
     }
@@ -104,11 +104,11 @@ public class TestControleController {
      * @param lessonId L'ID de la leçon
      * @return Liste des résultats avec le statut 200 (OK)
      */
-    @GetMapping("/user/{userId}/lesson/{lessonId}")
-    public ResponseEntity<List<TestControleDTO>> getTestControlesByUserIdAndLessonId(
+    @GetMapping("/user/{userId}/questionnaire/{questionnaireId}")
+    public ResponseEntity<List<TestControleDTO>> getTestControlesByUserIdAndQuestionnaireId(
             @PathVariable Long userId, 
             @PathVariable Long lessonId) {
-        List<TestControle> testControles = testControleService.getTestControlesByUserIdAndLessonId(userId, lessonId);
+        List<TestControle> testControles = testControleService.getTestControlesByUserIdAndQuestionnaireId(userId, lessonId);
         List<TestControleDTO> dtos = testControleMapper.toTestControleDTOList(testControles);
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
@@ -120,11 +120,11 @@ public class TestControleController {
      * @param lessonId L'ID de la leçon
      * @return Le meilleur résultat avec le statut 200 (OK) ou 404 (Not Found)
      */
-    @GetMapping("/user/{userId}/lesson/{lessonId}/best")
-    public ResponseEntity<TestControleDTO> getBestScoreByUserIdAndLessonId(
+    @GetMapping("/user/{userId}/questionnaire/{questionnaireId}/best")
+    public ResponseEntity<TestControleDTO> getBestScoreByUserIdAndQuestionnaireId(
             @PathVariable Long userId, 
             @PathVariable Long lessonId) {
-        TestControle bestScore = testControleService.getBestScoreByUserIdAndLessonId(userId, lessonId);
+        TestControle bestScore = testControleService.getBestScoreByUserIdAndQuestionnaireId(userId, lessonId);
         if (bestScore != null) {
             TestControleDTO dto = testControleMapper.toTestControleDTO(bestScore);
             return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -162,16 +162,16 @@ public class TestControleController {
     }
     
     /**
-     * Calcule la moyenne des scores pour une leçon
+     * Calcule la moyenne des scores pour un questionnaire
      * 
-     * @param lessonId L'ID de la leçon
+        * @param questionnaireId L'ID du questionnaire
      * @return La moyenne avec le statut 200 (OK)
      */
-    @GetMapping("/lesson/{lessonId}/average")
-    public ResponseEntity<Map<String, Object>> getAverageScoreByLessonId(@PathVariable Long lessonId) {
-        Integer average = testControleService.getAverageScoreByLessonId(lessonId);
+    @GetMapping("/questionnaire/{questionnaireId}/average")
+    public ResponseEntity<Map<String, Object>> getAverageScoreByQuestionnaireId(@PathVariable Long questionnaireId) {
+        Integer average = testControleService.getAverageScoreByQuestionnaireId(questionnaireId);
         Map<String, Object> response = Map.of(
-            "lessonId", lessonId,
+            "questionnaireId", questionnaireId,
             "averageScore", average
         );
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -5,6 +5,7 @@ import com.example.emailservice.dto.LessonDTO;
 import com.example.emailservice.model.Lesson;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.example.emailservice.model.Questionnaire;
 
 @Service
 public class LessonMapper {
@@ -18,8 +19,15 @@ public class LessonMapper {
         dto.setCourseId(lesson.getCourse() != null ? lesson.getCourse().getId() : null);
         dto.setCourseTitle(lesson.getCourse() != null ? lesson.getCourse().getTitle() : null);
         
-        // Calculer le nombre de questions
-        Integer questionCount = lesson.getQuestions() != null ? lesson.getQuestions().size() : 0;
+        // Calculer le nombre de questions via les questionnaires
+        Integer questionCount = 0;
+        if (lesson.getQuestionnaires() != null) {
+            for (Questionnaire questionnaire : lesson.getQuestionnaires()) {
+                if (questionnaire.getQuestions() != null) {
+                    questionCount += questionnaire.getQuestions().size();
+                }
+            }
+        }
         dto.setQuestionCount(questionCount);
         
         return dto;

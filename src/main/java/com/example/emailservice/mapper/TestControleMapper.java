@@ -5,7 +5,7 @@ import com.example.emailservice.dto.TestControleDTO;
 import com.example.emailservice.model.TestControle;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import com.example.emailservice.model.Questionnaire;
 @Service
 public class TestControleMapper {
 
@@ -15,8 +15,8 @@ public class TestControleMapper {
         dto.setNbBonneReponse(testControle.getNbBonneReponse());
         dto.setNbQuestion(testControle.getNbQuestion());
         dto.setDateCreation(testControle.getDateCreation());
-        dto.setLessonId(testControle.getLesson() != null ? testControle.getLesson().getId() : null);
-        dto.setLessonTitle(testControle.getLesson() != null ? testControle.getLesson().getTitle() : null);
+        dto.setQuestionnaireId(testControle.getQuestionnaire() != null ? testControle.getQuestionnaire().getId() : null);
+        dto.setQuestionnaireTitle(testControle.getQuestionnaire() != null ? testControle.getQuestionnaire().getTitle() : null);
         dto.setUserId(testControle.getUser() != null ? testControle.getUser().getId() : null);
         dto.setUsername(testControle.getUser() != null ? testControle.getUser().getUsername() : null);
         dto.setPourcentageReussite(testControle.getPourcentageReussite());

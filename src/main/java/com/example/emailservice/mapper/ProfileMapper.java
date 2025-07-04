@@ -34,7 +34,7 @@ public class ProfileMapper {
                 .filter(testControle -> testControle.getPourcentageReussite() < 100)
                 .count();
         Long nbTestControlePassed = testControles.stream()
-                .filter(testControle -> testControle.getPourcentageReussite() > 50)
+                .filter(testControle -> testControle.getPourcentageReussite() >= 80)
                 .count();
 
         ProfileDTO profileDTO = new ProfileDTO();

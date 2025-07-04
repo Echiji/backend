@@ -7,17 +7,17 @@ public class QuestionDTO {
     private String question;
     private String type;
     private String answer;
-    private Long lessonId;
+    private Long questionnaireId;
     private List<PossibilityDTO> possibilities;
 
     public QuestionDTO() {}
 
-    public QuestionDTO(Long id, String question, String type, String answer, Long lessonId, List<PossibilityDTO> possibilities) {
+    public QuestionDTO(Long id, String question, String type, String answer, Long questionnaireId, List<PossibilityDTO> possibilities) {
         this.id = id;
         this.question = question;
         this.type = type;
         this.answer = answer;
-        this.lessonId = lessonId;
+        this.questionnaireId = questionnaireId;
         this.possibilities = possibilities;
     }
 
@@ -34,8 +34,8 @@ public class QuestionDTO {
     public String getAnswer() { return answer; }
     public void setAnswer(String answer) { this.answer = answer; }
 
-    public Long getLessonId() { return lessonId; }
-    public void setLessonId(Long lessonId) { this.lessonId = lessonId; }
+    public Long getQuestionnaireId() { return questionnaireId; }
+    public void setQuestionnaireId(Long questionnaireId) { this.questionnaireId = questionnaireId; }
 
     public List<PossibilityDTO> getPossibilities() { return possibilities; }
     public void setPossibilities(List<PossibilityDTO> possibilities) { this.possibilities = possibilities; }

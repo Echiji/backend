@@ -53,7 +53,7 @@ public class Lesson {
     private Course course;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions;
+    private List<Questionnaire> questionnaires;
 
     /**
      * Constructeur par défaut requis par JPA
@@ -172,12 +172,12 @@ public class Lesson {
         return course != null ? course.getTitle() : null;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<Questionnaire> getQuestionnaires() {
+        return questionnaires;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setQuestionnaires(List<Questionnaire> questionnaires) {
+        this.questionnaires = questionnaires;
     }
 
     public void setCourseId(Long courseId) {

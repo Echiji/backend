@@ -8,6 +8,7 @@ C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\exa
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\TestControle.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\security\JwtAuthFilter.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\service\PossibilityService.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\QuestionnaireController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\TestControleRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\CourseController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\PossibilityRepository.java
@@ -20,6 +21,7 @@ C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\exa
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\User.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\service\CourseService.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\QuestionController.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\mapper\QuestionnaireMapper.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\exception\LessonException.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\mapper\ProfileMapper.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\PossibilityController.java
@@ -27,6 +29,8 @@ C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\exa
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\Course.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\CourseRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\EmailServiceApplication.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\dto\QuestionnaireDTO.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\Questionnaire.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\UserController.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\mapper\CourseMapper.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\security\JwtUtil.java
@@ -35,8 +39,10 @@ C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\exa
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\dto\CourseDTO.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\mapper\QuestionMapper.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\controller\TestControleController.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\QuestionnaireRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\dto\QuestionDTO.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\model\Lesson.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\repository\UserRepository.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\service\LessonService.java
 C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\dto\ProfileDTO.java
+C:\Users\Echiji\Downloads\flash-card-first-project\backend\src\main\java\com\example\emailservice\service\QuestionnaireService.java

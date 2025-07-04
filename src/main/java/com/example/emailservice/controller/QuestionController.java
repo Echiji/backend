@@ -19,9 +19,9 @@ public class QuestionController {
 @Autowired
     private QuestionMapper questionMapper;
 
-    @GetMapping("/lesson/{lessonId}")
-    public ResponseEntity<List<QuestionDTO>> getQuestionsByLessonId(@PathVariable Long lessonId) {
-        List<Question> questions = questionService.getQuestionsByLessonId(lessonId);
+    @GetMapping("/questionnaire/{questionnaireId}")
+    public ResponseEntity<List<QuestionDTO>> getQuestionsByQuestionnaireId(@PathVariable Long questionnaireId) {
+        List<Question> questions = questionService.getQuestionsByQuestionnaireId(questionnaireId);
         List<QuestionDTO> questionDTOs = questionMapper.toQuestionDTOList(questions);
         return ResponseEntity.ok(questionDTOs);
     }
@@ -46,7 +46,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable Long id, @RequestBody Question question) {
         System.out.println("updateQuestionid" + id);
-        System.out.println("updateQuestion" + question.getLesson().getId());
+        System.out.println("updateQuestion" + question.getQuestionnaire().getId());
 
         Question updatedQuestion = questionService.updateQuestion(id, question);
         if (updatedQuestion != null) {
